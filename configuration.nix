@@ -10,6 +10,12 @@
       ./hardware-configuration.nix
     ];
 
+  boot.kernelPackages = pkgs.linuxPackages_4_3;
+
+  # Use the gummiboot efi boot loader.
+  boot.loader.gummiboot.enable = true;
+  boot.loader.efi.canTouchEfiVariables = true;
+
   boot.loader.grub = {
     enable = true;
     version = 2;
@@ -55,6 +61,7 @@
      gcc
      ghc
      gitAndTools.gitFull
+     gnumake
      gnupg
      gnupg1compat
      htop
@@ -73,7 +80,7 @@
      screen
      slim
      sshfsFuse
-     texLiveFull
+     # texLiveFull
      thinkfan
      tmux
      tomahawk
@@ -85,6 +92,8 @@
      wget
      wpa_supplicant
      xf86_input_mtrack
+     xorg.xf86inputsynaptics
+     xorg.xmodmap
      zathura
      zsh
 
@@ -117,6 +126,7 @@
        enable = true;
        layout = "us";
        xkbOptions = "eurosign:e";
+       windowManager.default = "xmonad";
        windowManager.xmonad = {
          enableContribAndExtras = true;
          enable = true;
@@ -135,7 +145,13 @@
 
   # Mount /home partition.
   fileSystems."/home" =
-    { device ="/dev/sda3";
+    { device ="/dev/sda7";
+      fsType = "btrfs";
+    };
+
+  # Mount /data partition.
+  fileSystems."/data" =
+    { device ="/dev/sda5";
       fsType = "ext4";
     };
 
