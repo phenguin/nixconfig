@@ -40,19 +40,29 @@
   time.timeZone = "America/New_York";
 
   nixpkgs.config = {
-    vimHugeX.python = true;
+  vimHugeX.python = true;
+  allowUnfree = true;
+
+  firefox = {
+    enableGoogleTalkPlugin = true;
+    enableAdobeFlash = true;
+  };
+
   };
 
   # List packages installed in system profile. To search by name, run:
   # $ nix-env -qaP | grep wget
   environment.systemPackages =  with pkgs; [
 
+     alsaUtils
      audacious
      chromium
      clang
      cmake
      curl
      deluge
+     dropbox
+     dropbox-cli
      emacs
      encfs
      fasd
@@ -78,6 +88,7 @@
      rsync
      rxvt_unicode
      screen
+     silver-searcher
      slim
      sshfsFuse
      # texLiveFull
@@ -92,6 +103,7 @@
      wget
      wpa_supplicant
      xf86_input_mtrack
+     xmonad-with-packages
      xorg.xf86inputsynaptics
      xorg.xmodmap
      zathura
@@ -153,6 +165,12 @@
   fileSystems."/data" =
     { device ="/dev/sda5";
       fsType = "ext4";
+    };
+
+  # Mount /data partition.
+  fileSystems."/boot" =
+    { device ="/dev/sda6";
+      fsType = "vfat";
     };
 
   users.extraUsers.jcullen =
